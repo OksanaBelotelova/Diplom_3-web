@@ -13,9 +13,8 @@ class LoginPage(BasePage):
     RESTORE_BUTTON = [By. XPATH, './/button[text() = "Восстановить"]']
     SHOW_HIDE_BUTTON = [By. XPATH,
                         './/div[@class="input__icon input__icon-action"]']
-    NEW_PASSWORD_FIELD = [By. XPATH, './/div[@class="input__container"]']
-    NEW_PASSWORD_FIELD_WRAPPER = [By. XPATH,
-                                  './/div[@class="input__container"]/div']
+    NEW_PASSWORD_FIELD_ACTIVE_WRAPPER = [By. XPATH,
+                                         './/label[text()="Пароль"]/parent::div[contains(@class, "input_status_active")]']
 
     def __init__(self, driver):
         super().__init__(driver)
@@ -38,8 +37,8 @@ class LoginPage(BasePage):
     def click_show_password_button(self):
         self.find_element(self.SHOW_HIDE_BUTTON).click()
 
-    def get_border_color(self):
-        return self.NEW_PASSWORD_FIELD_WRAPPER.value_of_css_property('border')
+    def get_active_new_password_field_wrapper(self): # TODO wait until attributeToBe
+        return self.find_element(self.NEW_PASSWORD_FIELD_ACTIVE_WRAPPER)
 
     def input_password(self, password):
         self.find_element(self.PASSWORD_FIELD).send_keys(password)
@@ -53,5 +52,3 @@ class LoginPage(BasePage):
         self.input_email(auth_credentials.registration["email"])
         self.input_password(auth_credentials.registration["password"])
         self.click_login_button()
-
-    

@@ -3,14 +3,15 @@ from pages.login_page import LoginPage
 from pages.base_page import BasePage
 from data import URLs
 
+
 class TestBasePage:
 
-    def test_orders_feed(self,driver):
+    def test_orders_feed(self, driver):
         base = BasePage(driver)
         base.click_orders_feed()
         orders = base.get_orders_feed()
 
-        assert orders.is_displayed() 
+        assert orders.is_displayed()
 
     def test_constructor(self, driver):
         base = BasePage(driver)
@@ -18,39 +19,40 @@ class TestBasePage:
         base.click_constructor_button()
         constructor_section = base.get_constructor()
 
-        assert constructor_section.is_displayed() 
-    
+        assert constructor_section.is_displayed()
+
     def test_ingredient_details(self, driver):
         base = BasePage(driver)
         base.click_ingredient()
         details_popup = base.get_details_popup()
 
-        assert details_popup.is_displayed() 
+        assert details_popup.is_displayed()
 
     def test_close_ingredient_details(self, driver):
         base = BasePage(driver)
         base.click_ingredient()
-        details_popup = base.get_details_popup()
+
+        assert base.is_details_popup_visible()
+
         base.click_close_button()
-        
 
-        assert details_popup.is_displayed() is False
+        assert base.is_details_popup_hidden()
 
-    def test_count_of_ingredients(self,driver):
+    def test_count_of_ingredients(self, driver):
         base = BasePage(driver)
         base.drag_and_drop_ingredient()
         count = base.get_ingredients_count()
-    
+
         assert count == '1'
 
-    def test_confirmation_order(self, driver, create_and_login_user_via_API): 
+    def test_confirmation_order(self, driver, create_and_login_user_via_API):
         login = LoginPage(driver)
         base = BasePage(driver)
-        
+
         login.submit_login_form()
         base.drag_and_drop_bun()
         base.drag_and_drop_ingredient()
         base.click_submit_order()
         submit_message = base.get_confirmation_popup()
 
-        assert submit_message.is_displayed() 
+        assert submit_message.is_displayed()
