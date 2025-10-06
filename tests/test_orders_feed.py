@@ -32,3 +32,55 @@ class TestOrdersFeed:
         user_order_in_feed = order.get_user_order_by_id(order_id)
 
         assert user_order_in_feed.is_displayed()
+
+
+    def test_all_orders_counter(self,driver, create_and_login_user_via_API):
+        order = OrdersFeed(driver)
+        login = LoginPage(driver)
+
+        login.submit_login_form()
+        order.click_orders_feed()
+       
+        all_orders_number_before =  order.get_all_orders_number()
+        order.click_constructor_button()
+        order.drag_and_drop_bun()
+        order.drag_and_drop_ingredient()
+        order.click_submit_order()
+        order.close_confirmation_popup()
+        order.click_orders_feed()
+        all_orders_number_after = order.get_all_orders_number()
+
+        assert all_orders_number_before < all_orders_number_after
+
+    def test_todays_orders_counter(self,driver, create_and_login_user_via_API):
+        order = OrdersFeed(driver)
+        login = LoginPage(driver)
+
+        login.submit_login_form()
+        order.click_orders_feed()
+        todays_orders_number_before = order.get_todays_orders_number()
+        order.click_constructor_button()
+        order.drag_and_drop_bun()
+        order.drag_and_drop_ingredient()
+        order.click_submit_order()
+        order.close_confirmation_popup()
+        order.click_orders_feed()
+        todays_orders_number_after = order.get_todays_orders_number()
+
+        assert todays_orders_number_before < todays_orders_number_after
+
+    def test_new_order_comes_to_in_progress_list(self,driver, create_and_login_user_via_API):
+    
+        order = OrdersFeed(driver)
+        login = LoginPage(driver)
+       
+        login.submit_login_form()
+        order.drag_and_drop_bun()
+        order.drag_and_drop_ingredient()
+        order.click_submit_order()
+        order_id = order.get_order_id_from_confirmation_popup()
+        order.close_confirmation_popup()
+        order.click_orders_feed()
+        order_in_progress = order.get_order_in_progress_by_id(order_id)
+
+        assert order_in_progress.is_displayed()

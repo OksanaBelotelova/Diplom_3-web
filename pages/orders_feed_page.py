@@ -11,6 +11,12 @@ class OrdersFeed(BasePage):
         By.XPATH, './/a[contains(@class, "OrderHistory_link")][1]']
     ORDER_DETAILS_POPUP = [
         By.XPATH, './/section[contains(@class, "Modal_modal_opened")]']
+    ALL_ORDERS_COUNTER = [
+        By.XPATH, './/div[contains(@class, "OrderFeed_ordersData")]/div[contains(@class,"undefined")]/p[contains(@class, "OrderFeed_number")]']
+    TODAYS_ORDER_COUNTER = [
+        By.XPATH, './/div[contains(@class, "OrderFeed_ordersData")]/div[2]/p[contains(@class, "OrderFeed_number")]']
+    ORDER_ID_IN_PROGRESS = [
+        By.XPATH, './/ul[contains(@class, "OrderFeed_orderListReady")]//text()[contains(.,"{0}")]/parent::li']
 
     def __init__(self, driver):
         super().__init__(driver)
@@ -26,3 +32,18 @@ class OrdersFeed(BasePage):
         self.wait_until_not_presence(self.ORDERS_FEED_LOADING)
         formatted_xpath = [self.ORDER_ID[0], self.ORDER_ID[1].format(order_id)]
         return self.find_element(formatted_xpath)
+
+    def get_order_in_progress_by_id(self, order_id):
+        self.wait_until_presence(self.ORDERS_FEED_LOADING)
+        formatted_xpath = [self.ORDER_ID_IN_PROGRESS[0],
+                           self.ORDER_ID_IN_PROGRESS[1].format(order_id)]
+        self.wait_until_presence(formatted_xpath, 50)
+        return self.find_element(formatted_xpath)
+
+    def get_all_orders_number(self):
+        self.wait_until_not_presence(self.ORDERS_FEED_LOADING)
+        return int(self.find_element(self.ALL_ORDERS_COUNTER).text)
+
+    def get_todays_orders_number(self):
+        self.wait_until_not_presence(self.ORDERS_FEED_LOADING)
+        return int(self.find_element(self.TODAYS_ORDER_COUNTER).text)

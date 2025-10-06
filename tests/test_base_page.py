@@ -45,6 +45,7 @@ class TestBasePage:
 
         assert count == '1'
 
+    # TODO do one step "create_order" instead drag_and_drop and submit_order
     def test_confirmation_order(self, driver, create_and_login_user_via_API):
         login = LoginPage(driver)
         base = BasePage(driver)

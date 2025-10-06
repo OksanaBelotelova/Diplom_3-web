@@ -27,6 +27,8 @@ class BasePage():
     SUBMIT_ORDER = [By. XPATH, './/button[text() = "Оформить заказ"]']
     CONFIRMATION_POPUP = [By. XPATH,
                           './/p[text() ="Ваш заказ начали готовить"]']
+    CONFIRMATION_POPUP_LOADING = [
+        By.XPATH, "//div[contains(@class, 'Modal_modal__loading')]"]
     CONFIRMATION_POPUP_ORDER_ID = [
         By. XPATH, './/section[contains(@class, "Modal_modal_opened")]//h2[contains(@class, "Modal_modal__title")]']
     CLOSE_CONFIRMATION__POPUP = [
@@ -148,8 +150,13 @@ class BasePage():
         return self.find_element(self.CONFIRMATION_POPUP)
 
     def close_confirmation_popup(self):
+        self.wait_until_not_visible(self.CONFIRMATION_POPUP_LOADING, 50)
         self.wait_until_text_not(self.CONFIRMATION_POPUP_ORDER_ID, '9999', 500)
         self.find_element(self.CLOSE_CONFIRMATION__POPUP).click()
 
-    def login(self):
-        self.click_login_account_button()
+    def get_order_id_from_confirmation_popup(self):
+        self.wait_until_not_visible(self.CONFIRMATION_POPUP_LOADING, 50)
+        self.wait_until_text_not(self.CONFIRMATION_POPUP_ORDER_ID, '9999')
+        return self.find_element(self.CONFIRMATION_POPUP_ORDER_ID).text
+
+    

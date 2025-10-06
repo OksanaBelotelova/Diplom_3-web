@@ -4,7 +4,7 @@ from pages.account_page import AccountPage
 from data import URLs
 
 
-# TODO do smth with fixture
+# TODO do smth with fixture, and login.submit_login_form
 class TestAccountPage:
     def test_personal_account(self, driver, create_and_login_user_via_API): 
         login = LoginPage(driver)
