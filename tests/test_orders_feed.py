@@ -1,3 +1,4 @@
+import allure
 from pages.orders_feed_page import OrdersFeed
 from pages.login_page import LoginPage
 from pages.account_page import AccountPage
@@ -5,6 +6,8 @@ from pages.account_page import AccountPage
 
 class TestOrdersFeed:
 
+    @allure.title('Появление всплывающего окна с деталями заказа')
+    @allure.description('Если кликнуть на заказ, откроется всплывающее окно с деталями заказа')
     def test_order_details_popup(self, driver):
         order = OrdersFeed(driver)
 
@@ -14,7 +17,10 @@ class TestOrdersFeed:
 
         assert order_popup.is_displayed()
 
-    def test_users_order_is_displayed_in_orders_feed(self, driver, create_and_login_user_via_API):
+
+    @allure.title('Заказы пользователя отображаются в Ленте заказов')
+    @allure.description('Заказы пользователя из раздела «История заказов» отображаются на странице «Лента заказов»')
+    def test_users_order_is_displayed_in_orders_feed(self, driver):
         order = OrdersFeed(driver)
         login = LoginPage(driver)
         account = AccountPage(driver)
@@ -34,14 +40,15 @@ class TestOrdersFeed:
         assert user_order_in_feed.is_displayed()
 
 
-    def test_all_orders_counter(self,driver, create_and_login_user_via_API):
+    @allure.title('Работа счетчика "Выполнено за всё время"')
+    @allure.description('При создании нового заказа счётчик "Выполнено за всё время" увеличивается,')
+    def test_all_orders_counter(self, driver):
         order = OrdersFeed(driver)
         login = LoginPage(driver)
 
         login.submit_login_form()
         order.click_orders_feed()
-       
-        all_orders_number_before =  order.get_all_orders_number()
+        all_orders_number_before = order.get_all_orders_number()
         order.click_constructor_button()
         order.drag_and_drop_bun()
         order.drag_and_drop_ingredient()
@@ -52,7 +59,10 @@ class TestOrdersFeed:
 
         assert all_orders_number_before < all_orders_number_after
 
-    def test_todays_orders_counter(self,driver, create_and_login_user_via_API):
+
+    @allure.title('Работа счетчика "Выполнено за сегодня')
+    @allure.description('При создании нового заказа счётчик "Выполнено за сегодня" увеличивается')
+    def test_todays_orders_counter(self, driver):
         order = OrdersFeed(driver)
         login = LoginPage(driver)
 
@@ -69,11 +79,14 @@ class TestOrdersFeed:
 
         assert todays_orders_number_before < todays_orders_number_after
 
-    def test_new_order_comes_to_in_progress_list(self,driver, create_and_login_user_via_API):
-    
+
+    @allure.title('Появление заказа в разделе "В работе"')
+    @allure.description('После оформления заказа его номер появляется в разделе "В работе"')
+    def test_new_order_comes_to_in_progress_list(self, driver):
+
         order = OrdersFeed(driver)
         login = LoginPage(driver)
-       
+
         login.submit_login_form()
         order.drag_and_drop_bun()
         order.drag_and_drop_ingredient()

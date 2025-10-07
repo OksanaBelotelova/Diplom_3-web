@@ -4,9 +4,11 @@ from pages.account_page import AccountPage
 from data import URLs
 
 
-# TODO do smth with fixture, and login.submit_login_form
 class TestAccountPage:
-    def test_personal_account(self, driver, create_and_login_user_via_API): 
+
+    @allure.title('Переход по клику на "Личный кабинет"')
+    @allure.description('Переход на страницу личного кабинета по кнопке "Личный кабинет"')
+    def test_personal_account(self, driver):
         login = LoginPage(driver)
         account = AccountPage(driver)
 
@@ -18,14 +20,16 @@ class TestAccountPage:
 
         assert actual_url == expected_url
 
-    def test_order_history(self,driver, create_and_login_user_via_API):
+
+    @allure.title('Переход в раздел "История заказов"')
+    @allure.description('Переход в раздел истории заказов по кнопке "История заказов"')
+    def test_order_history(self, driver):
         login = LoginPage(driver)
         account = AccountPage(driver)
 
         login.submit_login_form()
         account.click_account_button()
         account.wait_until_page_loaded()
-
         account.click_orders_history()
         account.wait_until_page_loaded()
 
@@ -34,7 +38,10 @@ class TestAccountPage:
 
         assert actual_url == expected_url
 
-    def test_user_logout(self,driver, create_and_login_user_via_API):
+
+    @allure.title('Выход из аккаунта')
+    @allure.description('Кликая на кнопку "Выход" юзер попадает на страницу регистрации')
+    def test_user_logout(self, driver):
         login = LoginPage(driver)
         account = AccountPage(driver)
 
@@ -44,8 +51,6 @@ class TestAccountPage:
         account.click_logout_button()
 
         actual_url = account.get_current_page()
-        
         expected_url = URLs.login_page
 
         assert actual_url == expected_url
-    

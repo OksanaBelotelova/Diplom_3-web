@@ -16,36 +16,41 @@ class LoginPage(BasePage):
     NEW_PASSWORD_FIELD_ACTIVE_WRAPPER = [By. XPATH,
                                          './/label[text()="Пароль"]/parent::div[contains(@class, "input_status_active")]']
 
+
     def __init__(self, driver):
         super().__init__(driver)
 
-    @allure.step('Press on "Восстановить пароль"')
+    @allure.step('Кликни "Восстановить пароль"')
     def click_restore_password_button(self):
         self.find_element(self.RESTORE_PASSWORD_BUTTON).click()
 
-    @allure.step('Input your email')
+    @allure.step('Введи имейл')
     def input_email(self, email):
         self.find_element(self.EMAIL_FIELD).send_keys(email)
 
-    @allure.step('Press on "Восстановить"')
+    @allure.step('Нажми на "Восстановить"')
     def click_restore_button(self):
         self.wait_until_clickable(self.RESTORE_BUTTON, time=10)
         self.find_element(self.RESTORE_BUTTON).click()
         self.wait_until_clickable(self.SHOW_HIDE_BUTTON, time=10)
 
-    @allure.step('Press on show password button')
+    @allure.step('Нажми на кнопку "Показать/скрыть пароль"')
     def click_show_password_button(self):
         self.find_element(self.SHOW_HIDE_BUTTON).click()
 
-    def get_active_new_password_field_wrapper(self): # TODO wait until attributeToBe
+    @allure.step('Проверь что поле подсвечено')
+    def get_active_new_password_field_wrapper(self):
         return self.find_element(self.NEW_PASSWORD_FIELD_ACTIVE_WRAPPER)
 
+    @allure.step('Введи пароль')
     def input_password(self, password):
         self.find_element(self.PASSWORD_FIELD).send_keys(password)
 
+    @allure.step('Кликни на кнопку "Войти"')
     def click_login_button(self):
         self.find_element(self.LOGIN_BUTTON).click()
 
+    @allure.step('Выполни вход на сайт')
     def submit_login_form(self):
         auth_credentials = AuthCredentials()
         self.click_login_account_button()

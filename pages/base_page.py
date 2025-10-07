@@ -6,11 +6,11 @@ from selenium.webdriver import ActionChains
 
 
 class BasePage():
+
     PERSONAL_ACCOUNT = [By. XPATH, './/p[text() = "Личный Кабинет"]']
     LOGIN_ACCOUNT_BUTTON = [By. XPATH, './/button[text() = "Войти в аккаунт"]']
     CONSTRUCTOR_BUTTON = [By. XPATH, './/p[text() = "Конструктор"]']
     CONSTRUCTOR_SECTION = [By. XPATH, './/h1[text() ="Соберите бургер"]']
-
     ORDER_FEED = [By. XPATH, './/p[text() = "Лента Заказов"]']
     ORDER_FEED_TITLE = [By. XPATH, './/h1[text() ="Лента заказов"]']
     ORDER_LIST_SECTION = [By. XPATH,
@@ -34,9 +34,11 @@ class BasePage():
     CLOSE_CONFIRMATION__POPUP = [
         By. XPATH, './/section[contains(@class, "Modal_modal_opened")]//button[contains(@class, "Modal_modal__close_modified")]']
 
+
     def __init__(self, driver):
         self.driver = driver
         self.actions = ActionChains(driver)
+
 
     def find_element(self, element):
         return self.driver.find_element(*element)
@@ -65,33 +67,33 @@ class BasePage():
         WebDriverWait(self.driver, time).until_not(
             expected_conditions.text_to_be_present_in_element(element, text))
 
-    @allure.step('Check URL')
+    @allure.step('Проверь URL')
     def get_current_page(self):
         return self.driver.current_url
 
-    @allure.step('Press on "Личный аккаунт"')
+    @allure.step('Нажми на "Личный аккаунт"')
     def click_account_button(self):
         self.find_element(self.PERSONAL_ACCOUNT).click()
 
-    @allure.step('Press on "Войти в аккаунт"')
+    @allure.step('Нажми на "Войти в аккаунт"')
     def click_login_account_button(self):
         self.wait_until_clickable(self.LOGIN_ACCOUNT_BUTTON, time=10)
         self.find_element(self.LOGIN_ACCOUNT_BUTTON).click()
 
-    @allure.step('Нажми на  "Лента заказов"')
+    @allure.step('Нажми на "Лента заказов"')
     def click_orders_feed(self):
         self.find_element(self.ORDER_FEED).click()
 
-    @allure.step('Проверь что "Лента заказов" представлена на странице')
+    @allure.step('Проверь что секция "Лента заказов" представлена на странице')
     def get_orders_feed(self):
         self.wait_until_presence(self.ORDER_FEED_TITLE)
         return self.find_element(self.ORDER_FEED_TITLE)
 
-    @allure.step('Нажми на  "Конструктор"')
+    @allure.step('Нажми на "Конструктор"')
     def click_constructor_button(self):
         self.find_element(self.CONSTRUCTOR_BUTTON).click()
 
-    @allure.step('Проверь что "Собери бургер" секция представлена на странице')
+    @allure.step('Проверь что секция "Собери бургер" представлена на странице')
     def get_constructor(self):
         self.wait_until_presence(self.CONSTRUCTOR_SECTION)
         return self.find_element(self.CONSTRUCTOR_SECTION)
@@ -100,15 +102,10 @@ class BasePage():
     def click_ingredient(self):
         self.find_element(self.INGREDIENT_BUN).click()
 
-    # TODO название должно быть другим
-    @allure.step('Проверить что появилось окно с деталями')
-    def get_details_popup(self):
-        self.wait_until_visible(self.INGREDIENT_DETAILS_POPUP)
-        return self.find_element(self.INGREDIENT_DETAILS_POPUP)
-
     @allure.step('Проверь что появилось окошко с деталями')
     def is_details_popup_visible(self):
-        details_popup = self.get_details_popup()
+        self.wait_until_visible(self.INGREDIENT_DETAILS_POPUP)
+        details_popup = self.find_element(self.INGREDIENT_DETAILS_POPUP)
         return details_popup.value_of_css_property('visibility') == 'visible'
 
     @allure.step('Проверь что скрылось окошко с деталями')
@@ -145,15 +142,17 @@ class BasePage():
     def click_submit_order(self):
         self.find_element(self.SUBMIT_ORDER).click()
 
-    @allure.step('Проверь что заказ создался')
+    @allure.step('Проверь, что заказ создался')
     def get_confirmation_popup(self):
         return self.find_element(self.CONFIRMATION_POPUP)
 
+    @allure.step('Закрой окно с деталями заказа')
     def close_confirmation_popup(self):
         self.wait_until_not_visible(self.CONFIRMATION_POPUP_LOADING, 50)
         self.wait_until_text_not(self.CONFIRMATION_POPUP_ORDER_ID, '9999', 500)
         self.find_element(self.CLOSE_CONFIRMATION__POPUP).click()
 
+    @allure.step('Проверь id заказа')
     def get_order_id_from_confirmation_popup(self):
         self.wait_until_not_visible(self.CONFIRMATION_POPUP_LOADING, 50)
         self.wait_until_text_not(self.CONFIRMATION_POPUP_ORDER_ID, '9999')
